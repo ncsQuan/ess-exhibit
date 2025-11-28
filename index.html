@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Essence - 3D Portfolio</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #ffffff;
+    }
+
+    .scene {
+      perspective: 1500px;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .camera {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    /* Corner UI Elements */
+    .corner-ui {
+      position: fixed;
+      z-index: 100;
+      font-size: 18px;
+      font-weight: 600;
+      color: #000;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .top-left {
+      top: 30px;
+      left: 30px;
+    }
+
+    .top-right {
+      top: 30px;
+      right: 30px;
+      font-size: 16px;
+      font-weight: 400;
+      min-width: 100px;
+      text-align: right;
+    }
+
+    .bottom-left {
+      bottom: 30px;
+      left: 30px;
+      cursor: pointer;
+      padding: 8px 16px;
+      /* border: 2px solid #000; */
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .bottom-left:hover {
+      background: #000;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .bottom-right {
+      bottom: 30px;
+      right: 30px;
+      cursor: pointer;
+      padding: 8px 16px;
+      /* border: 2px solid #000; */
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .bottom-right:hover {
+      background: #000;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .image-card {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 8px;
+      background: #ffffff; /* brighter card */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* lighter shadow */
+      overflow: hidden;
+      border: 1px solid #eee; /* lighter border */
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .image-card:hover {
+      border-color: #d9d9d9;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-card .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #f7f7f7 0%, #ffffff 100%);
+      color: #333;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .image-card:nth-child(1) .placeholder { background: linear-gradient(135deg, #ffd6d6 0%, #ffe0e0 100%); }
+    .image-card:nth-child(2) .placeholder { background: linear-gradient(135deg, #d6e8ff 0%, #e0efff 100%); }
+    .image-card:nth-child(3) .placeholder { background: linear-gradient(135deg, #d6ffd6 0%, #e0ffe0 100%); }
+    .image-card:nth-child(4) .placeholder { background: linear-gradient(135deg, #ffffd6 0%, #ffffe0 100%); }
+    .image-card:nth-child(5) .placeholder { background: linear-gradient(135deg, #ffd6ff 0%, #ffe0ff 100%); }
+    .image-card:nth-child(6) .placeholder { background: linear-gradient(135deg, #d6ffff 0%, #e0ffff 100%); }
+    .image-card:nth-child(7) .placeholder { background: linear-gradient(135deg, #ffecd6 0%, #fff0e0 100%); }
+    .image-card:nth-child(8) .placeholder { background: linear-gradient(135deg, #e8d6ff 0%, #f0e0ff 100%); }
+
+    .card-info {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #000;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Social modal */
+    .social-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      z-index: 300;
+      text-align: center;
+      border: 2px solid #000;
+      display: none;
+    }
+
+    .social-modal.active {
+      display: block;
+    }
+
+    .social-modal h2 {
+      margin-bottom: 25px;
+      font-size: 24px;
+      color: #000;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40%;
+      height: 40%;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid #000;
+    }
+
+    .social-link:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    .close-modal {
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .close-modal:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.25); /* lighter overlay to keep brightness */
+      z-index: 250;
+      display: none;
+    }
+
+    .modal-overlay.active {
+      display: block;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+
+<body>
+  <div class="scene">
+    <div class="camera"></div>
+  </div>
+
+  <!-- Corner UI -->
+  <div class="corner-ui top-left">Essence</div>
+  <div class="corner-ui top-right" id="time-display">00:00:00</div>
+  <div class="corner-ui bottom-left" id="contact-btn">Contact</div>
+  <div class="corner-ui bottom-right" id="second-room-btn">Second Room</div>
+
+  <!-- Look hint -->
+  <!-- <div id="look-hint" style="position:fixed; top:12px; left:50%; transform:translateX(-50%); background:#000; color:#fff; padding:8px 14px; border-radius:6px; z-index:110; font-size:14px; border:2px solid #000;">Click to look around</div> -->
+
+  <!-- Social Modal -->
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="social-modal" id="social-modal">
+    <h2>Get in Touch</h2>
+    <div class="social-links">
+      <a href="https://twitter.com" target="_blank" class="social-link fa fa-twitter" title="Twitter"></a>
+      <a href="https://linkedin.com" target="_blank" class="social-link fa fa-linkedin" title="LinkedIn"></a>
+      <a href="https://instagram.com" target="_blank" class="social-link fa fa-instagram" title="Instagram"></a>
+      <a href="mailto:contact@example.com" class="social-link" title="Email">Email</a>
+    </div>
+    <button class="close-modal" id="close-modal">Close</button>
+  </div>
+
+  <script>
+    const portfolioItems = [
+      // Tip: Use optional offsetX/offsetY/offsetZ to fine‑tune placement per item
+      { id: 1, title: 'Project Alpha',  wall: 'front',  height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
+      { id: 2, title: 'Project Beta',   wall: 'right',  height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
+      { id: 3, title: 'Project Gamma',  wall: 'back',   height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
+      { id: 4, title: 'Project Delta',  wall: 'left',   height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
+      { id: 5, title: 'Floor Art',      wall: 'floor',  height: 'floor',  offsetX: 0,   offsetY: 0,   offsetZ: 0 },
+      { id: 6, title: 'Ceiling Art',    wall: 'ceiling',height: 'ceiling',offsetX: 0,   offsetY: 0,   offsetZ: 0 },
+      { id: 7, title: 'Wall Detail',    wall: 'front',  height: 'high',   offsetX: 200, offsetY: -100,offsetZ: 0 },
+      { id: 8, title: 'Another Piece',  wall: 'left',   height: 'low',    offsetX: -150,offsetY: 80,  offsetZ: 0 }
+    ];
+
+    const camera = document.querySelector(".camera");
+    let selectedCard = null;
+    let isZoomedIn = false;
+    const cards = [];
+
+    // Update time every second
+    function updateTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // 0 -> 12
+      const hoursStr = String(hours).padStart(2, '0');
+      document.getElementById('time-display').textContent = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // Create image cards
+  portfolioItems.forEach((item, i) => {
+      const card = document.createElement("div");
+      card.className = "image-card";
+      card.innerHTML = `
+        <div class="placeholder">${item.title}</div>
+        <div class="card-info">${item.title}</div>
+      `;
+
+      let x = 0, y = 0, z = 0, rotX = 0, rotY = 0, rotZ = 0;
+
+      // Room dimensions and gallery spacing
+      const wallDistance = 500; // distance from camera to each wall
+      const hangHeight = 100; // center height on walls
+      const verticalOffsetHigh = -200;
+      const verticalOffsetLow = 200;
+      const wallSpacing = 500; // spacing between pieces on walls
+      const floorGrid = { spacing: 600, y: 800 };
+      const ceilingGrid = { spacing: 600, y: -800 };
+
+      // Determine index offsets per wall to distribute images
+      const indexOffset = i % 3; // 0,1,2 for simple distribution
+      const offset = (indexOffset - 1) * wallSpacing; // -spacing, 0, +spacing
+
+      switch (item.wall) {
+        case 'front':
+          x = offset;
+          y = hangHeight;
+          z = -wallDistance;
+          rotY = 0;
+          break;
+        case 'back':
+          x = offset;
+          y = hangHeight;
+          z = wallDistance;
+          rotY = Math.PI;
+          break;
+        case 'left':
+          x = -wallDistance;
+          y = hangHeight;
+          z = offset;
+          rotY = -90;
+          break;
+        case 'right':
+          x = wallDistance;
+          y = hangHeight;
+          z = offset;
+          rotY = 90;
+          break;
+        case 'floor':
+          x = (indexOffset - 1) * floorGrid.spacing;
+          y = floorGrid.y;
+          z = (Math.floor(i / 3) - 1) * floorGrid.spacing;
+          rotX = 90; // rotate to face upward toward viewer
+          break;
+        case 'ceiling':
+          x = (indexOffset - 1) * ceilingGrid.spacing;
+          y = ceilingGrid.y;
+          z = (Math.floor(i / 3) - 1) * ceilingGrid.spacing;
+          rotX = -90;  // rotate to face downward toward viewer
+          break;
+      }
+
+      // Adjust height for middle/high/low positions
+      if (item.wall !== 'floor' && item.wall !== 'ceiling') {
+        if (item.height === 'high') y = verticalOffsetHigh;
+        else if (item.height === 'low') y = verticalOffsetLow;
+        else y = hangHeight;
+      }
+
+      // Apply optional per-item manual offsets
+      if (typeof item.offsetX === 'number') x += item.offsetX;
+      if (typeof item.offsetY === 'number') y += item.offsetY;
+      if (typeof item.offsetZ === 'number') z += item.offsetZ;
+
+      // Initial animation from distance
+      gsap.set(card, {
+        x: x,
+        y: y,
+        z: z,
+        rotationX: rotX,
+        rotationY: rotY,
+        rotationZ: rotZ,
+        opacity: 0,
+        scale: 0.8
+      });
+
+      camera.appendChild(card);
+      cards.push({ 
+        element: card, 
+        x, y, z, 
+        rotX, rotY, rotZ,
+        item 
+      });
+
+      // Animate card sliding in
+      gsap.to(card, {
+        opacity: 1,
+        scale: 1,
+        duration: 1.2,
+        delay: i * 0.1,
+        ease: "power3.out"
+      });
+
+      // Hover effects
+      card.addEventListener("mouseenter", () => {
+        if (selectedCard !== card && !isZoomedIn) {
+          gsap.to(card, {
+            scale: 1.1,
+            boxShadow: "0 25px 70px rgba(0, 0, 0, 0.2)",
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        }
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (selectedCard !== card && !isZoomedIn) {
+          gsap.to(card, {
+            scale: 1,
+            boxShadow: "0 15px 50px rgba(0, 0, 0, 0.15)",
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        }
+      });
+
+      // Click to focus and move closer; also request pointer lock so looking works everywhere
+      card.addEventListener("click", (e) => {
+        if (document.pointerLockElement !== document.body) {
+          // Try to engage pointer lock from a clear user gesture
+          const el = document.body;
+          (el.requestPointerLock || el.mozRequestPointerLock || el.webkitRequestPointerLock)?.call(el);
+        }
+        if (!isZoomedIn) {
+          zoomIntoCard(card);
+        }
+      });
+    });
+
+    // Zoom into card function
+    function zoomIntoCard(card) {
+      isZoomedIn = true;
+      selectedCard = card;
+
+      gsap.to(card, {
+        x: 0,
+        y: 0,
+        z: -800,
+        rotationX: 0,
+        rotationY: 0,
+        rotationZ: 0,
+        scale: 2.5,
+        duration: 1,
+        ease: "power2.inOut"
+      });
+
+      cards.forEach(c => {
+        if (c.element !== card) {
+          gsap.to(c.element, {
+            opacity: 0.1,
+            pointerEvents: "none",
+            duration: 0.6,
+            ease: "power2.out"
+          });
+        }
+      });
+
+      const exitBtn = document.createElement("div");
+      exitBtn.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 24px;
+        background: #000;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        z-index: 200;
+        font-weight: 600;
+        border: 2px solid #000;
+        transition: all 0.3s ease;
+      `;
+      exitBtn.textContent = "ESC or Click to Exit";
+      exitBtn.onmouseover = () => {
+        exitBtn.style.background = '#fff';
+        exitBtn.style.color = '#000';
+      };
+      exitBtn.onmouseout = () => {
+        exitBtn.style.background = '#000';
+        exitBtn.style.color = '#fff';
+      };
+      document.body.appendChild(exitBtn);
+
+      const exitHandler = (e) => {
+        if (e.key === "Escape" || (e.type === "click" && exitBtn.contains(e.target))) {
+          resetView();
+          document.removeEventListener("keydown", exitHandler);
+          document.removeEventListener("click", exitHandler);
+          exitBtn.remove();
+        }
+      };
+      document.addEventListener("keydown", exitHandler);
+      document.addEventListener("click", exitHandler);
+    }
+
+    // Reset view function
+    function resetView() {
+      isZoomedIn = false;
+      const card = selectedCard;
+
+      if (card) {
+        const cardData = cards.find(c => c.element === card);
+        gsap.to(card, {
+          x: cardData.x,
+          y: cardData.y,
+          z: cardData.z,
+          rotationX: cardData.rotX,
+          rotationY: cardData.rotY,
+          rotationZ: cardData.rotZ,
+          scale: 1,
+          opacity: 1,
+          duration: 1,
+          ease: "power2.inOut"
+        });
+      }
+
+      cards.forEach(c => {
+        gsap.to(c.element, {
+          opacity: 1,
+          pointerEvents: "auto",
+          duration: 0.6,
+          ease: "power2.out"
+        });
+      });
+
+      selectedCard = null;
+    }
+
+    // Pointer lock for true 360° free-look
+    let yaw = 0;     // rotationY
+    let pitch = 0;   // rotationX
+    const sensitivity = 0.12; // mouse sensitivity
+
+    const lookHint = document.getElementById('look-hint');
+
+    const requestLock = () => {
+      const el = document.body;
+      (el.requestPointerLock || el.mozRequestPointerLock || el.webkitRequestPointerLock)?.call(el);
+    };
+
+    const onPointerLockChange = () => {
+      const locked = document.pointerLockElement === document.body;
+      // Hide or show hint based on lock state
+      if (lookHint) lookHint.style.display = locked ? 'none' : 'block';
+    };
+
+    document.addEventListener('pointerlockchange', onPointerLockChange);
+
+    // Click on scene to enter pointer lock when not zoomed
+    document.querySelector('.scene').addEventListener('click', () => {
+      if (!isZoomedIn && document.pointerLockElement !== document.body) requestLock();
+    });
+
+    // Keyboard fallback: press L to request lock
+    document.addEventListener('keydown', (e) => {
+      if (!isZoomedIn && e.key.toLowerCase() === 'l' && document.pointerLockElement !== document.body) requestLock();
+    });
+
+    // Accumulate yaw/pitch with mouse movement for infinite yaw and clamped pitch
+    document.addEventListener('mousemove', (e) => {
+      if (isZoomedIn) return;
+      if (document.pointerLockElement === document.body) {
+        // Pointer-lock mode: use deltas for infinite yaw
+        yaw += e.movementX * sensitivity;
+        pitch -= e.movementY * sensitivity;
+      } else {
+        // Fallback: map absolute mouse position to rotations so looking still works
+        // Expand yaw range to ±180° so you can look fully behind without pointer lock
+        const absYaw = (e.clientX / window.innerWidth - 0.5) * 360; // ±180°
+        const absPitch = -(e.clientY / window.innerHeight - 0.5) * 120; // ±60°
+        yaw = absYaw;
+        pitch = absPitch;
+      }
+
+      const maxPitch = 89;
+      if (pitch > maxPitch) pitch = maxPitch;
+      if (pitch < -maxPitch) pitch = -maxPitch;
+
+      gsap.to(camera, {
+        rotationY: yaw,
+        rotationX: pitch,
+        duration: 0.08,
+        ease: 'none'
+      });
+    });
+
+    // ESC key to reset
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isZoomedIn) {
+        resetView();
+      }
+    });
+
+    // Contact button - show social modal
+    document.getElementById('contact-btn').addEventListener('click', () => {
+      document.getElementById('modal-overlay').classList.add('active');
+      document.getElementById('social-modal').classList.add('active');
+    });
+
+    // Close modal
+    document.getElementById('close-modal').addEventListener('click', () => {
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.getElementById('social-modal').classList.remove('active');
+    });
+
+    // Click overlay to close modal
+    document.getElementById('modal-overlay').addEventListener('click', () => {
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.getElementById('social-modal').classList.remove('active');
+    });
+
+    // Second room button
+    document.getElementById('second-room-btn').addEventListener('click', () => {
+      alert('Second room coming soon!');
+    });
+  </script>
+</body>
+</html>
