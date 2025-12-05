@@ -6,6 +6,12 @@
   <title>Essence Lowe - Exhibition</title>
   <link rel="icon" href="images/essence_Artboard_2.png.webp">
 
+  <script>
+    // Redirect mobile users to mobile-friendly version
+    if (window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      window.location.href = 'mobile-index.html';
+    }
+  </script>
 
   <style>
     * {

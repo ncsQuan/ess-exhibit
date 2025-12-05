@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Essence Lowe - Portfolio</title>
+  <link rel="icon" href="images/essence_Artboard_2.png.webp">
+  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Arimo', sans-serif;
+      background: #ffffff;
+      color: #000;
+    }
+
+    .mobile-container {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+    }
+
+    .mobile-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-top: 20px;
+    }
+
+    .mobile-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .mobile-header .bio {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      max-width: 100%;
+      margin: 0 auto 20px;
+    }
+
+    .mobile-header .bio p {
+      margin-bottom: 15px;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex: 1;
+    }
+
+    @media (min-width: 640px) {
+      .portfolio-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+    }
+
+    .portfolio-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      aspect-ratio: 1;
+      background: #f5f5f5;
+      border: 1px solid #eee;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .portfolio-card:active {
+      transform: scale(0.95);
+    }
+
+    .portfolio-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .portfolio-card .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 15px;
+      background: linear-gradient(135deg, #f7f7f7 0%, #ffffff 100%);
+    }
+
+    .portfolio-card:nth-child(1) .placeholder { background: linear-gradient(135deg, #ffd6d6 0%, #ffe0e0 100%); }
+    .portfolio-card:nth-child(2) .placeholder { background: linear-gradient(135deg, #d6e8ff 0%, #e0efff 100%); }
+    .portfolio-card:nth-child(3) .placeholder { background: linear-gradient(135deg, #d6ffd6 0%, #e0ffe0 100%); }
+    .portfolio-card:nth-child(4) .placeholder { background: linear-gradient(135deg, #ffffd6 0%, #ffffe0 100%); }
+    .portfolio-card:nth-child(5) .placeholder { background: linear-gradient(135deg, #ffd6ff 0%, #ffe0ff 100%); }
+    .portfolio-card:nth-child(6) .placeholder { background: linear-gradient(135deg, #d6ffff 0%, #e0ffff 100%); }
+    .portfolio-card:nth-child(7) .placeholder { background: linear-gradient(135deg, #ffecd6 0%, #fff0e0 100%); }
+    .portfolio-card:nth-child(8) .placeholder { background: linear-gradient(135deg, #e8d6ff 0%, #f0e0ff 100%); }
+    .portfolio-card:nth-child(9) .placeholder { background: linear-gradient(135deg, #ffe0cc 0%, #fff0dd 100%); }
+    .portfolio-card:nth-child(10) .placeholder { background: linear-gradient(135deg, #e0f0ff 0%, #f0f8ff 100%); }
+    .portfolio-card:nth-child(11) .placeholder { background: linear-gradient(135deg, #f0d6ff 0%, #f8e0ff 100%); }
+    .portfolio-card:nth-child(12) .placeholder { background: linear-gradient(135deg, #d6ffe0 0%, #e0fff0 100%); }
+
+    .mobile-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      margin-top: auto;
+    }
+
+    .footer-btn {
+      padding: 10px 20px;
+      background: #000;
+      color: #fff;
+      border: 2px solid #000;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .footer-btn:active {
+      transform: scale(0.95);
+    }
+
+    .footer-btn.secondary {
+      background: #fff;
+      color: #000;
+    }
+
+    .time-display {
+      position: fixed;
+      top: max(15px, env(safe-area-inset-top));
+      right: max(15px, env(safe-area-inset-right));
+      font-size: 12px;
+      color: #666;
+      z-index: 100;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="time-display" id="time-display">00:00:00</div>
+
+  <div class="mobile-container">
+    <div class="mobile-header">
+      <img src="images/ess pro.jpeg" alt="Essence Lowe" style="width:100px;height:100px;border-radius:50%;margin-bottom:15px;object-fit:cover;">
+      <h1>Essence Lowe</h1>
+      <div class="bio">
+        <p>Art director and designer crafting compelling visual stories through culture, community, and creative excellence.</p>
+      </div>
+    </div>
+
+    <div class="portfolio-grid" id="portfolio-grid"></div>
+
+    <div class="mobile-footer">
+      <button class="footer-btn secondary" id="contact-btn">Contact</button>
+      <a href="html/decible.html" class="footer-btn">View Projects</a>
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div id="modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.25);z-index:250;display:none;" onclick="closeModal()"></div>
+  <div id="social-modal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:30px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.3);z-index:300;text-align:center;display:none;" onclick="event.stopPropagation()">
+    <h2 style="margin-bottom:20px;font-size:22px;">Get in Touch</h2>
+    <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+      <a href="https://www.linkedin.com/in/essence-lowe/" target="_blank" style="padding:12px 24px;background:#000;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;transition:all 0.2s;display:inline-block;">LinkedIn</a>
+      <a href="mailto:essence.lowe@icloud.com" style="padding:12px 24px;background:#000;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;transition:all 0.2s;display:inline-block;">Email</a>
+    </div>
+    <button onclick="closeModal()" style="background:#000;color:#fff;border:2px solid #000;padding:10px 20px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;transition:all 0.2s;">Close</button>
+  </div>
+
+  <script>
+    const portfolioItems = [
+      { id: 1,  title: 'Front Alpha',  image: 'images/FTDwallprint.jpg',            page: 'html/decible.html' },
+      { id: 2,  title: 'Front Beta',   image: 'images/magazine cover.jpg',          page: 'html/fck-that.html' },
+      { id: 3,  title: 'Front Detail', image: 'images/Decible App.jpg',           page: 'html/urban-pulse.html' },
+      { id: 4,  title: 'Left Alpha',   image: 'images/court.webp',         page: 'html/smart.html' },
+      { id: 5,  title: 'Left Beta',    image: 'images/Sandwich.jpg',          page: 'html/sandwich.html' },
+      { id: 6,  title: 'Left Delta',   image: 'images/smartcircle package.jpg',         page: 'html/big-feeling.html' },
+      { id: 7,  title: 'Right Alpha',  image: 'images/Decible I+P+S.jpg',        page: 'html/project-7.html' },
+      { id: 8,  title: 'Right Beta',   image: 'images/Decible app2.jpg',             page: 'html/project-8.html' },
+      { id: 9,  title: 'Right Piece',  image: 'images/decible art.jpg', page: 'html/project-9.html' },
+      { id: 10, title: 'Back Gamma',   image: 'images/magazine page.png',       page: 'html/project-10.html' },
+      { id: 11, title: 'Floor Art',    image: 'images/smartcir.webp',         page: 'html/project-11.html' },
+      { id: 12, title: 'Ceiling Art',  image: 'images/bigfeelings.webp', page: 'html/project-12.html' }
+    ];
+
+    function updateTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const hoursStr = String(hours).padStart(2, '0');
+      document.getElementById('time-display').textContent = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // Render portfolio grid
+    const grid = document.getElementById('portfolio-grid');
+    portfolioItems.forEach(item => {
+      const link = document.createElement('a');
+      link.href = item.page;
+      link.className = 'portfolio-card';
+      if (item.image) {
+        link.innerHTML = `<img src="${item.image}" alt="${item.title}" />`;
+      } else {
+        link.innerHTML = `<div class="placeholder">${item.title}</div>`;
+      }
+      grid.appendChild(link);
+    });
+
+    // Contact button
+    document.getElementById('contact-btn').addEventListener('click', () => {
+      document.getElementById('modal-overlay').style.display = 'block';
+      document.getElementById('social-modal').style.display = 'block';
+    });
+
+    function closeModal() {
+      document.getElementById('modal-overlay').style.display = 'none';
+      document.getElementById('social-modal').style.display = 'none';
+    }
+
+    // Close modal on overlay click
+    document.getElementById('modal-overlay').addEventListener('click', closeModal);
+  </script>
+</body>
+</html>
