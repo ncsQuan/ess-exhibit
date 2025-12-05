@@ -40,10 +40,16 @@
     .corner-ui {
       position: fixed;
       z-index: 100;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 17px;
+      font-weight: 50;
       color: #000;
       text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .title-ui{
+      font-weight: 400;
+      font-size: 20px;
+
     }
 
     .top-left {
@@ -169,7 +175,6 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       z-index: 300;
       text-align: center;
-      border: 2px solid #000;
       display: none;
     }
 
@@ -198,8 +203,8 @@
       width: 40%;
       height: 40%;
       border-radius: 50%;
-      background: #000;
-      color: #fff;
+      background: #fff;
+      color: #000;
       text-decoration: none;
       font-weight: 600;
       transition: all 0.3s ease;
@@ -207,8 +212,8 @@
     }
 
     .social-link:hover {
-      background: #fff;
-      color: #000;
+      background: #000;
+      color: #fff;
       transform: scale(1.1);
     }
 
@@ -263,7 +268,7 @@
     /* 3D Text Paragraph */
     .text-paragraph {
       position: absolute;
-      max-width: 300px;
+      max-width: 400px;
       padding: 15px 20px;
       background: transparent;
       border: none;
@@ -286,26 +291,24 @@
   </div>
 
   <!-- Wall Visibility Toggle Button -->
-  <button id="toggle-walls-btn" style="position:fixed;top:30px;left:50%;transform:translateX(-50%);z-index:120;padding:10px 22px;font-size:15px;font-weight:600;background:#fff;border:2px solid #000;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;transition:background 0.2s;">Show Walls</button>
+  <!-- <button id="toggle-walls-btn" style="position:fixed;top:30px;left:50%;transform:translateX(-50%);z-index:120;padding:10px 22px;font-size:15px;font-weight:600;background:#fff;border:2px solid #000;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;transition:background 0.2s;">Show Walls</button> -->
 
   <!-- Corner UI -->
-  <div class="corner-ui top-left">Essence</div>
+  <div class="corner-ui top-left title-ui">Essence Lowe</div>
   <div class="corner-ui top-right" id="time-display">00:00:00</div>
   <div class="corner-ui bottom-left" id="contact-btn">Contact</div>
-  <div class="corner-ui bottom-right" id="second-room-btn">Second Room</div>
+  <div class="corner-ui bottom-right" id="second-room-btn">Projects</div>
 
-  <!-- Look hint -->
-  <!-- <div id="look-hint" style="position:fixed; top:12px; left:50%; transform:translateX(-50%); background:#000; color:#fff; padding:8px 14px; border-radius:6px; z-index:110; font-size:14px; border:2px solid #000;">Click to look around</div> -->
 
   <!-- Social Modal -->
   <div class="modal-overlay" id="modal-overlay"></div>
   <div class="social-modal" id="social-modal">
     <h2>Get in Touch</h2>
     <div class="social-links">
-      <a href="https://twitter.com" target="_blank" class="social-link fa fa-twitter" title="Twitter"></a>
-      <a href="https://linkedin.com" target="_blank" class="social-link fa fa-linkedin" title="LinkedIn"></a>
-      <a href="https://instagram.com" target="_blank" class="social-link fa fa-instagram" title="Instagram"></a>
-      <a href="mailto:contact@example.com" class="social-link" title="Email">Email</a>
+      <a href="https://www.linkedin.com/in/essence-lowe/" target="_blank" class="social-link fa fa-linkedin" title="LinkedIn"></a>
+      <!-- <a href="https://www.instagram.com/ess.lo/" target="_blank" class="social-link fa fa-instagram" title="Instagram"></a> -->
+      <!-- <a href="https://twitter.com" target="_blank" class="social-link fa fa-twitter" title="Twitter"></a> -->
+      <a href="mailto:essence.lowe@icloud.com" class="social-link" title="Email">Email</a>
     </div>
     <button class="close-modal" id="close-modal">Close</button>
   </div>
@@ -313,18 +316,18 @@
   <script>
     const portfolioItems = [
       // Tip: Use optional offsetX/offsetY/offsetZ to fine‑tune placement per item
-      { id: 1,  title: 'Front Alpha',  wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 300,  offsetZ: 0, image: 'images/Decible App.jpg' },
-      { id: 2,  title: 'Front Beta',   wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 350,  offsetZ: 0, image: 'images/Decible I+P+S.jpg' },
-      { id: 3,  title: 'Front Detail', wall: 'front',  height: 'high',   offsetX: 300,  offsetY: 300,  offsetZ: 0, image: 'images/Decible Intro.jpg' },
-      { id: 4,  title: 'Left Alpha',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 150, image: 'images/Decible app2.jpg' },
-      { id: 5,  title: 'Left Beta',    wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Decible logo.jpg' },
-      { id: 6,  title: 'Left Delta',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 500,  offsetZ: -800, image: 'images/decible art.jpg' },
-      { id: 7,  title: 'Right Alpha',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 0,    offsetZ: 500, image: 'images/FTDwallprint.jpg' },
-      { id: 8,  title: 'Right Beta',   wall: 'right',  height: 'middle', offsetX: 0,    offsetY: -200, offsetZ: 350, image: 'images/Sandwich.jpg' },
-      { id: 9,  title: 'Right Piece',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 300,  offsetZ: -200, image: 'images/smartcircle package.jpg' },
-      { id: 10, title: 'Back Gamma',   wall: 'back',   height: 'middle', offsetX: 0,    offsetY: 0,    offsetZ: 200, image: 'images/magazine cover.jpg' },
-      { id: 11, title: 'Floor Art',    wall: 'floor',  height: 'floor',  offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/magazine page.png' },
-      { id: 12, title: 'Ceiling Art',  wall: 'ceiling',height: 'ceiling',offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Big Feelings Website.webp' }
+      { id: 1,  title: 'Front Alpha',  wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 300,  offsetZ: 0, image: 'images/Decible App.jpg',            page: 'html/project-1.html' },
+      { id: 2,  title: 'Front Beta',   wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 350,  offsetZ: 0, image: 'images/Decible I+P+S.jpg',          page: 'html/project-2.html' },
+      { id: 3,  title: 'Front Detail', wall: 'front',  height: 'high',   offsetX: 300,  offsetY: 300,  offsetZ: 0, image: 'images/Decible Intro.jpg',           page: 'html/project-3.html' },
+      { id: 4,  title: 'Left Alpha',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 150, image: 'images/Decible app2.jpg',         page: 'html/project-4.html' },
+      { id: 5,  title: 'Left Beta',    wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Decible logo.jpg',          page: 'html/project-5.html' },
+      { id: 6,  title: 'Left Delta',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 500,  offsetZ: -800, image: 'images/decible art.jpg',         page: 'html/project-6.html' },
+      { id: 7,  title: 'Right Alpha',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 0,    offsetZ: 500, image: 'images/FTDwallprint.jpg',        page: 'html/project-7.html' },
+      { id: 8,  title: 'Right Beta',   wall: 'right',  height: 'middle', offsetX: 0,    offsetY: -200, offsetZ: 350, image: 'images/Sandwich.jpg',             page: 'html/project-8.html' },
+      { id: 9,  title: 'Right Piece',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 300,  offsetZ: -200, image: 'images/smartcircle package.jpg', page: 'html/project-9.html' },
+      { id: 10, title: 'Back Gamma',   wall: 'back',   height: 'middle', offsetX: 0,    offsetY: 0,    offsetZ: 200, image: 'images/magazine cover.jpg',       page: 'html/project-10.html' },
+      { id: 11, title: 'Floor Art',    wall: 'floor',  height: 'floor',  offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/magazine page.png',         page: 'html/project-11.html' },
+      { id: 12, title: 'Ceiling Art',  wall: 'ceiling',height: 'ceiling',offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Big Feelings Website.webp', page: 'html/project-12.html' }
     ];
 
     const camera = document.querySelector(".camera");
@@ -352,8 +355,9 @@
 
     // Create image cards
   portfolioItems.forEach((item, i) => {
-      const card = document.createElement("div");
+      const card = document.createElement("a");
       card.className = "image-card";
+      card.href = item.page;
       const content = item.image
         ? `<img src="${item.image}" alt="${item.title}" />\n           <div class="card-info">${item.title}</div>`
         : `<div class="placeholder">${item.title}</div>\n           <div class="card-info">${item.title}</div>`;
@@ -449,7 +453,14 @@
       if (item.id === 1) {
         const paragraph = document.createElement('div');
         paragraph.className = 'text-paragraph';
-        paragraph.innerHTML = '<p>This is a sample paragraph that appears above the Front Alpha image. You can customize this text to describe your work or add any information you want.</p>';
+        const bioText = `
+          <p>Art director and designer, Essence cultivated her creative roots in California before settling in Atlanta, what she now calls her creative playground. </p>
+          <br>
+          <p>Her work is guided by a focus on culture, community, and compelling storytelling, allowing her to effectively amplify voices and creative spirit.</p>
+          <br>
+          <p> Essence's design experience is vast, encompassing everything from large scale projects like billboards and covers to detailed work in websites, custom lettering, and menus.</p>
+        `;
+        paragraph.innerHTML = bioText;
         
         // Position above the card (same x, z, but higher y)
         gsap.set(paragraph, {
@@ -505,15 +516,11 @@
         }
       });
 
-      // Click to focus and move closer; also request pointer lock so looking works everywhere
+      // Click: navigate to project page
       card.addEventListener("click", (e) => {
-        if (document.pointerLockElement !== document.body) {
-          // Try to engage pointer lock from a clear user gesture
-          const el = document.body;
-          (el.requestPointerLock || el.mozRequestPointerLock || el.webkitRequestPointerLock)?.call(el);
-        }
-        if (!isZoomedIn) {
-          zoomIntoCard(card);
+        e.preventDefault();
+        if (item.page) {
+          window.location.href = item.page;
         }
       });
     });
@@ -637,10 +644,7 @@
 
     document.addEventListener('pointerlockchange', onPointerLockChange);
 
-    // Click on scene to enter pointer lock when not zoomed
-    document.querySelector('.scene').addEventListener('click', () => {
-      if (!isZoomedIn && document.pointerLockElement !== document.body) requestLock();
-    });
+    
 
     // Keyboard fallback: press L to request lock
     document.addEventListener('keydown', (e) => {
@@ -675,12 +679,6 @@
       });
     });
 
-    // ESC key to reset
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && isZoomedIn) {
-        resetView();
-      }
-    });
 
     // Contact button - show social modal
     document.getElementById('contact-btn').addEventListener('click', () => {
@@ -700,9 +698,9 @@
       document.getElementById('social-modal').classList.remove('active');
     });
 
-    // Second room button
+    // Projects button
     document.getElementById('second-room-btn').addEventListener('click', () => {
-      alert('Second room coming soon!');
+      window.location.href = 'html/project-1.html';
     });
 
     // --- Room Walls ---
