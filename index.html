@@ -17,7 +17,7 @@
     body, html {
       height: 100%;
       overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Arimo', sans-serif;
       background: #ffffff;
     }
 
@@ -30,6 +30,13 @@
     }
 
     .camera {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .camera-content {
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
@@ -144,6 +151,8 @@
     .image-card:nth-child(1) .placeholder { background: linear-gradient(135deg, #ffd6d6 0%, #ffe0e0 100%); }
     .image-card:nth-child(2) .placeholder { background: linear-gradient(135deg, #d6e8ff 0%, #e0efff 100%); }
     .image-card:nth-child(3) .placeholder { background: linear-gradient(135deg, #d6ffd6 0%, #e0ffe0 100%); }
+    .image-card[data-adjust="true"] { width: 450px; }
+    .image-card[data-adjust="true"] img { object-position: left center; }
     .image-card:nth-child(4) .placeholder { background: linear-gradient(135deg, #ffffd6 0%, #ffffe0 100%); }
     .image-card:nth-child(5) .placeholder { background: linear-gradient(135deg, #ffd6ff 0%, #ffe0ff 100%); }
     .image-card:nth-child(6) .placeholder { background: linear-gradient(135deg, #d6ffff 0%, #e0ffff 100%); }
@@ -282,12 +291,15 @@
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 
 <body>
   <div class="scene">
-    <div class="camera"></div>
+    <div class="camera">
+      <div class="camera-content"></div>
+    </div>
   </div>
 
   <!-- Wall Visibility Toggle Button -->
@@ -316,21 +328,22 @@
   <script>
     const portfolioItems = [
       // Tip: Use optional offsetX/offsetY/offsetZ to fine‑tune placement per item
-      { id: 1,  title: 'Front Alpha',  wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 300,  offsetZ: 0, image: 'images/Decible App.jpg',            page: 'html/project-1.html' },
-      { id: 2,  title: 'Front Beta',   wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 350,  offsetZ: 0, image: 'images/Decible I+P+S.jpg',          page: 'html/project-2.html' },
-      { id: 3,  title: 'Front Detail', wall: 'front',  height: 'high',   offsetX: 300,  offsetY: 300,  offsetZ: 0, image: 'images/Decible Intro.jpg',           page: 'html/project-3.html' },
-      { id: 4,  title: 'Left Alpha',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 150, image: 'images/Decible app2.jpg',         page: 'html/project-4.html' },
-      { id: 5,  title: 'Left Beta',    wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Decible logo.jpg',          page: 'html/project-5.html' },
-      { id: 6,  title: 'Left Delta',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 500,  offsetZ: -800, image: 'images/decible art.jpg',         page: 'html/project-6.html' },
-      { id: 7,  title: 'Right Alpha',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 0,    offsetZ: 500, image: 'images/FTDwallprint.jpg',        page: 'html/project-7.html' },
-      { id: 8,  title: 'Right Beta',   wall: 'right',  height: 'middle', offsetX: 0,    offsetY: -200, offsetZ: 350, image: 'images/Sandwich.jpg',             page: 'html/project-8.html' },
-      { id: 9,  title: 'Right Piece',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 300,  offsetZ: -200, image: 'images/smartcircle package.jpg', page: 'html/project-9.html' },
-      { id: 10, title: 'Back Gamma',   wall: 'back',   height: 'middle', offsetX: 0,    offsetY: 0,    offsetZ: 200, image: 'images/magazine cover.jpg',       page: 'html/project-10.html' },
-      { id: 11, title: 'Floor Art',    wall: 'floor',  height: 'floor',  offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/magazine page.png',         page: 'html/project-11.html' },
-      { id: 12, title: 'Ceiling Art',  wall: 'ceiling',height: 'ceiling',offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Big Feelings Website.webp', page: 'html/project-12.html' }
+      { id: 1,  title: 'Front Alpha',  wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 300,  offsetZ: 0, image: 'images/FTDwallprint.jpg',            page: 'html/project-1.html' },
+      { id: 2,  title: 'Front Beta',   wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 350,  offsetZ: 0, image: 'images/magazine cover.jpg',          page: 'html/project-2.html' },
+      { id: 3,  title: 'Front Detail', wall: 'front',  height: 'high',   offsetX: 300,  offsetY: 300,  offsetZ: 0, image: 'images/Decible App.jpg',           page: 'html/project-3.html' },
+      { id: 4,  title: 'Left Alpha',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 150, image: 'images/court.webp',         page: 'html/project-4.html' },
+      { id: 5,  title: 'Left Beta',    wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Sandwich.jpg',          page: 'html/project-5.html' },
+      { id: 6,  title: 'Left Delta',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 500,  offsetZ: -800, image: 'images/smartcircle package.jpg',         page: 'html/project-6.html' },
+      { id: 7,  title: 'Right Alpha',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 0,    offsetZ: 500, image: 'images/Decible I+P+S.jpg',        page: 'html/project-7.html' },
+      { id: 8,  title: 'Right Beta',   wall: 'right',  height: 'middle', offsetX: 0,    offsetY: -200, offsetZ: 350, image: 'images/Decible app2.jpg',             page: 'html/project-8.html' },
+      { id: 9,  title: 'Right Piece',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 300,  offsetZ: -200, image: 'images/decible art.jpg', page: 'html/project-9.html' },
+      { id: 10, title: 'Back Gamma',   wall: 'back',   height: 'middle', offsetX: 0,    offsetY: 0,    offsetZ: 200, image: 'images/magazine page.png',       page: 'html/project-10.html' },
+      { id: 11, title: 'Floor Art',    wall: 'floor',  height: 'floor',  offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/smartcir.webp',         page: 'html/project-11.html' },
+      { id: 12, title: 'Ceiling Art',  wall: 'ceiling',height: 'ceiling',offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/bigfeelings.webp', page: 'html/project-12.html' }
     ];
 
     const camera = document.querySelector(".camera");
+    const cameraContent = document.querySelector(".camera-content");
     let selectedCard = null;
     let isZoomedIn = false;
     const cards = [];
@@ -358,6 +371,7 @@
       const card = document.createElement("a");
       card.className = "image-card";
       card.href = item.page;
+      if (item.id === 3) card.dataset.adjust = "true";
       const content = item.image
         ? `<img src="${item.image}" alt="${item.title}" />\n           <div class="card-info">${item.title}</div>`
         : `<div class="placeholder">${item.title}</div>\n           <div class="card-info">${item.title}</div>`;
@@ -441,7 +455,7 @@
         scale: 0.8
       });
 
-      camera.appendChild(card);
+      cameraContent.appendChild(card);
       cards.push({ 
         element: card, 
         x, y, z, 
@@ -473,7 +487,7 @@
           opacity: 0
         });
         
-        camera.appendChild(paragraph);
+        cameraContent.appendChild(paragraph);
         
         // Animate paragraph sliding in
         gsap.to(paragraph, {
@@ -568,7 +582,7 @@
         border: 2px solid #000;
         transition: all 0.3s ease;
       `;
-      exitBtn.textContent = "ESC or Click to Exit";
+      exitBtn.textContent = "Click to Exit";
       exitBtn.onmouseover = () => {
         exitBtn.style.background = '#fff';
         exitBtn.style.color = '#000';
@@ -704,7 +718,7 @@
     });
 
     // --- Room Walls ---
-    const cameraEl = document.querySelector('.camera');
+    const cameraEl = document.querySelector('.camera-content');
     const wallData = [
       { class: 'front',    style: 'transform: translateZ(-500px);' },
       { class: 'back',     style: 'transform: rotateY(180deg) translateZ(-500px);' },
@@ -735,4 +749,5 @@
     });
   </script>
 </body>
+</html>
 </html>
