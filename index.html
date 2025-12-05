@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Essence - 3D Portfolio</title>
+  <title>Essence Lowe - Exhibition</title>
+  <link rel="icon" href="images/essence_Artboard_2.png.webp">
+
 
   <style>
     * {
@@ -20,7 +22,7 @@
     }
 
     .scene {
-      perspective: 1500px;
+      perspective: 800px;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
@@ -240,6 +242,39 @@
     .modal-overlay.active {
       display: block;
     }
+
+    /* Room walls */
+    .room-wall {
+      position: absolute;
+      width: 1200px;
+      height: 800px;
+      background: rgba(0,0,0,0.08);
+      border: 2px dashed #aaa;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+      z-index: 10;
+    }
+    .room-wall.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* 3D Text Paragraph */
+    .text-paragraph {
+      position: absolute;
+      max-width: 300px;
+      padding: 15px 20px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      box-shadow: none;
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -249,6 +284,9 @@
   <div class="scene">
     <div class="camera"></div>
   </div>
+
+  <!-- Wall Visibility Toggle Button -->
+  <button id="toggle-walls-btn" style="position:fixed;top:30px;left:50%;transform:translateX(-50%);z-index:120;padding:10px 22px;font-size:15px;font-weight:600;background:#fff;border:2px solid #000;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:pointer;transition:background 0.2s;">Show Walls</button>
 
   <!-- Corner UI -->
   <div class="corner-ui top-left">Essence</div>
@@ -275,20 +313,27 @@
   <script>
     const portfolioItems = [
       // Tip: Use optional offsetX/offsetY/offsetZ to fine‑tune placement per item
-      { id: 1, title: 'Project Alpha',  wall: 'front',  height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
-      { id: 2, title: 'Project Beta',   wall: 'right',  height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
-      { id: 3, title: 'Project Gamma',  wall: 'back',   height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
-      { id: 4, title: 'Project Delta',  wall: 'left',   height: 'middle', offsetX: 0,   offsetY: 0,   offsetZ: 0 },
-      { id: 5, title: 'Floor Art',      wall: 'floor',  height: 'floor',  offsetX: 0,   offsetY: 0,   offsetZ: 0 },
-      { id: 6, title: 'Ceiling Art',    wall: 'ceiling',height: 'ceiling',offsetX: 0,   offsetY: 0,   offsetZ: 0 },
-      { id: 7, title: 'Wall Detail',    wall: 'front',  height: 'high',   offsetX: 200, offsetY: -100,offsetZ: 0 },
-      { id: 8, title: 'Another Piece',  wall: 'left',   height: 'low',    offsetX: -150,offsetY: 80,  offsetZ: 0 }
+      { id: 1,  title: 'Front Alpha',  wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 300,  offsetZ: 0, image: 'images/Decible App.jpg' },
+      { id: 2,  title: 'Front Beta',   wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 350,  offsetZ: 0, image: 'images/Decible I+P+S.jpg' },
+      { id: 3,  title: 'Front Detail', wall: 'front',  height: 'high',   offsetX: 300,  offsetY: 300,  offsetZ: 0, image: 'images/Decible Intro.jpg' },
+      { id: 4,  title: 'Left Alpha',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 150, image: 'images/Decible app2.jpg' },
+      { id: 5,  title: 'Left Beta',    wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Decible logo.jpg' },
+      { id: 6,  title: 'Left Delta',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 500,  offsetZ: -800, image: 'images/decible art.jpg' },
+      { id: 7,  title: 'Right Alpha',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 0,    offsetZ: 500, image: 'images/FTDwallprint.jpg' },
+      { id: 8,  title: 'Right Beta',   wall: 'right',  height: 'middle', offsetX: 0,    offsetY: -200, offsetZ: 350, image: 'images/Sandwich.jpg' },
+      { id: 9,  title: 'Right Piece',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 300,  offsetZ: -200, image: 'images/smartcircle package.jpg' },
+      { id: 10, title: 'Back Gamma',   wall: 'back',   height: 'middle', offsetX: 0,    offsetY: 0,    offsetZ: 200, image: 'images/magazine cover.jpg' },
+      { id: 11, title: 'Floor Art',    wall: 'floor',  height: 'floor',  offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/magazine page.png' },
+      { id: 12, title: 'Ceiling Art',  wall: 'ceiling',height: 'ceiling',offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Big Feelings Website.webp' }
     ];
 
     const camera = document.querySelector(".camera");
     let selectedCard = null;
     let isZoomedIn = false;
     const cards = [];
+
+    // Set initial camera position (move forward to hide back wall)
+    gsap.set(camera, { z: 300 });
 
     // Update time every second
     function updateTime() {
@@ -309,10 +354,10 @@
   portfolioItems.forEach((item, i) => {
       const card = document.createElement("div");
       card.className = "image-card";
-      card.innerHTML = `
-        <div class="placeholder">${item.title}</div>
-        <div class="card-info">${item.title}</div>
-      `;
+      const content = item.image
+        ? `<img src="${item.image}" alt="${item.title}" />\n           <div class="card-info">${item.title}</div>`
+        : `<div class="placeholder">${item.title}</div>\n           <div class="card-info">${item.title}</div>`;
+      card.innerHTML = content;
 
       let x = 0, y = 0, z = 0, rotX = 0, rotY = 0, rotZ = 0;
 
@@ -322,8 +367,8 @@
       const verticalOffsetHigh = -200;
       const verticalOffsetLow = 200;
       const wallSpacing = 500; // spacing between pieces on walls
-      const floorGrid = { spacing: 600, y: 800 };
-      const ceilingGrid = { spacing: 600, y: -800 };
+      const floorGrid = { spacing: 600, y: 600 };
+      const ceilingGrid = { spacing: 600, y: -600 };
 
       // Determine index offsets per wall to distribute images
       const indexOffset = i % 3; // 0,1,2 for simple distribution
@@ -337,33 +382,33 @@
           rotY = 0;
           break;
         case 'back':
-          x = offset;
+          x = wallDistance;
           y = hangHeight;
-          z = wallDistance;
-          rotY = Math.PI;
+          z = wallDistance + 100; // extra offset to avoid clipping
+          rotY = 180;
           break;
         case 'left':
-          x = -wallDistance;
-          y = hangHeight;
-          z = offset;
-          rotY = -90;
-          break;
-        case 'right':
-          x = wallDistance;
+          x = -wallDistance + 400; // extra offset to avoid clipping
           y = hangHeight;
           z = offset;
           rotY = 90;
           break;
+        case 'right':
+          x = wallDistance + 600; // extra offset to avoid clipping
+          y = hangHeight;
+          z = offset;
+          rotY = -90;
+          break;
         case 'floor':
-          x = (indexOffset - 1) * floorGrid.spacing;
+          x = wallDistance;
           y = floorGrid.y;
-          z = (Math.floor(i / 3) - 1) * floorGrid.spacing;
+          z = -100;
           rotX = 90; // rotate to face upward toward viewer
           break;
         case 'ceiling':
-          x = (indexOffset - 1) * ceilingGrid.spacing;
+          x = wallDistance - 300;
           y = ceilingGrid.y;
-          z = (Math.floor(i / 3) - 1) * ceilingGrid.spacing;
+          z = -500;
           rotX = -90;  // rotate to face downward toward viewer
           break;
       }
@@ -399,6 +444,34 @@
         rotX, rotY, rotZ,
         item 
       });
+
+      // Add paragraph above Front Alpha (id: 1)
+      if (item.id === 1) {
+        const paragraph = document.createElement('div');
+        paragraph.className = 'text-paragraph';
+        paragraph.innerHTML = '<p>This is a sample paragraph that appears above the Front Alpha image. You can customize this text to describe your work or add any information you want.</p>';
+        
+        // Position above the card (same x, z, but higher y)
+        gsap.set(paragraph, {
+          x: x,
+          y: y - 420,  // Position above the card
+          z: z,
+          rotationX: rotX,
+          rotationY: rotY,
+          rotationZ: rotZ,
+          opacity: 0
+        });
+        
+        camera.appendChild(paragraph);
+        
+        // Animate paragraph sliding in
+        gsap.to(paragraph, {
+          opacity: 1,
+          duration: 1.2,
+          delay: i * 0.1 + 0.3,
+          ease: "power3.out"
+        });
+      }
 
       // Animate card sliding in
       gsap.to(card, {
@@ -630,6 +703,37 @@
     // Second room button
     document.getElementById('second-room-btn').addEventListener('click', () => {
       alert('Second room coming soon!');
+    });
+
+    // --- Room Walls ---
+    const cameraEl = document.querySelector('.camera');
+    const wallData = [
+      { class: 'front',    style: 'transform: translateZ(-500px);' },
+      { class: 'back',     style: 'transform: rotateY(180deg) translateZ(-500px);' },
+      { class: 'left',     style: 'transform: rotateY(-90deg) translateZ(-500px);' },
+      { class: 'right',    style: 'transform: rotateY(90deg) translateZ(-500px);' },
+      { class: 'floor',    style: 'width:1200px;height:1200px;transform: rotateX(90deg) translateZ(-400px);' },
+      { class: 'ceiling',  style: 'width:1200px;height:1200px;transform: rotateX(-90deg) translateZ(-400px);' },
+    ];
+    const wallEls = wallData.map(w => {
+      const el = document.createElement('div');
+      el.className = `room-wall wall-${w.class}`;
+      el.setAttribute('style', (el.getAttribute('style')||'') + w.style);
+      cameraEl.appendChild(el);
+      return el;
+    });
+
+    // --- Wall Toggle Button ---
+    const toggleBtn = document.getElementById('toggle-walls-btn');
+    let wallsVisible = false;
+    // Set walls invisible on start
+    wallEls.forEach(el => el.classList.remove('visible'));
+    toggleBtn.textContent = 'Show Walls';
+    
+    toggleBtn.addEventListener('click', () => {
+      wallsVisible = !wallsVisible;
+      wallEls.forEach(el => el.classList.toggle('visible', wallsVisible));
+      toggleBtn.textContent = wallsVisible ? 'Hide Walls' : 'Show Walls';
     });
   </script>
 </body>
