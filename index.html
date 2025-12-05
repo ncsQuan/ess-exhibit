@@ -60,13 +60,13 @@
     }
 
     .top-left {
-      top: 30px;
-      left: 30px;
+      top: calc(20px + env(safe-area-inset-top));
+      left: calc(20px + env(safe-area-inset-left));
     }
 
     .top-right {
-      top: 30px;
-      right: 30px;
+      top: calc(20px + env(safe-area-inset-top));
+      right: calc(20px + env(safe-area-inset-right));
       font-size: 16px;
       font-weight: 400;
       min-width: 100px;
@@ -74,12 +74,11 @@
     }
 
     .bottom-left {
-      bottom: 30px;
-      left: 30px;
+      bottom: calc(20px + env(safe-area-inset-bottom));
+      left: calc(20px + env(safe-area-inset-left));
       cursor: pointer;
-      padding: 8px 16px;
-      /* border: 2px solid #000; */
-      border-radius: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
       transition: all 0.3s ease;
     }
 
@@ -90,12 +89,11 @@
     }
 
     .bottom-right {
-      bottom: 30px;
-      right: 30px;
+      bottom: calc(20px + env(safe-area-inset-bottom));
+      right: calc(20px + env(safe-area-inset-right));
       cursor: pointer;
-      padding: 8px 16px;
-      /* border: 2px solid #000; */
-      border-radius: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
       transition: all 0.3s ease;
     }
 
@@ -153,11 +151,27 @@
     .image-card:nth-child(3) .placeholder { background: linear-gradient(135deg, #d6ffd6 0%, #e0ffe0 100%); }
     .image-card[data-adjust="true"] { width: 450px; }
     .image-card[data-adjust="true"] img { object-position: left center; }
+    .image-card:nth-child(8) { width: 580px; }
     .image-card:nth-child(4) .placeholder { background: linear-gradient(135deg, #ffffd6 0%, #ffffe0 100%); }
     .image-card:nth-child(5) .placeholder { background: linear-gradient(135deg, #ffd6ff 0%, #ffe0ff 100%); }
     .image-card:nth-child(6) .placeholder { background: linear-gradient(135deg, #d6ffff 0%, #e0ffff 100%); }
     .image-card:nth-child(7) .placeholder { background: linear-gradient(135deg, #ffecd6 0%, #fff0e0 100%); }
     .image-card:nth-child(8) .placeholder { background: linear-gradient(135deg, #e8d6ff 0%, #f0e0ff 100%); }
+
+    @media (max-width: 768px) {
+      .corner-ui {
+        font-size: 15px;
+      }
+
+      .image-card {
+        width: 240px;
+        height: 240px;
+      }
+
+      .image-card[data-adjust="true"] {
+        width: 360px;
+      }
+    }
 
     .card-info {
       position: absolute;
@@ -328,12 +342,12 @@
   <script>
     const portfolioItems = [
       // Tip: Use optional offsetX/offsetY/offsetZ to fine‑tune placement per item
-      { id: 1,  title: 'Front Alpha',  wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 300,  offsetZ: 0, image: 'images/FTDwallprint.jpg',            page: 'html/project-1.html' },
-      { id: 2,  title: 'Front Beta',   wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 350,  offsetZ: 0, image: 'images/magazine cover.jpg',          page: 'html/project-2.html' },
-      { id: 3,  title: 'Front Detail', wall: 'front',  height: 'high',   offsetX: 300,  offsetY: 300,  offsetZ: 0, image: 'images/Decible App.jpg',           page: 'html/project-3.html' },
-      { id: 4,  title: 'Left Alpha',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 150, image: 'images/court.webp',         page: 'html/project-4.html' },
-      { id: 5,  title: 'Left Beta',    wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Sandwich.jpg',          page: 'html/project-5.html' },
-      { id: 6,  title: 'Left Delta',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 500,  offsetZ: -800, image: 'images/smartcircle package.jpg',         page: 'html/project-6.html' },
+      { id: 1,  title: 'Front Alpha',  wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 300,  offsetZ: 0, image: 'images/FTDwallprint.jpg',            page: 'html/decible.html' },
+      { id: 2,  title: 'Front Beta',   wall: 'front',  height: 'low',    offsetX: 700,  offsetY: 350,  offsetZ: 0, image: 'images/magazine cover.jpg',          page: 'html/fck-that.html' },
+      { id: 3,  title: 'Front Detail', wall: 'front',  height: 'high',   offsetX: 300,  offsetY: 300,  offsetZ: 0, image: 'images/Decible App.jpg',           page: 'html/urban-pulse.html' },
+      { id: 4,  title: 'Left Alpha',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 150, image: 'images/court.webp',         page: 'html/smart.html' },
+      { id: 5,  title: 'Left Beta',    wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/Sandwich.jpg',          page: 'html/sandwich.html' },
+      { id: 6,  title: 'Left Delta',   wall: 'left',   height: 'high',   offsetX: 0,    offsetY: 500,  offsetZ: -800, image: 'images/smartcircle package.jpg',         page: 'html/big-feeling.html' },
       { id: 7,  title: 'Right Alpha',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 0,    offsetZ: 500, image: 'images/Decible I+P+S.jpg',        page: 'html/project-7.html' },
       { id: 8,  title: 'Right Beta',   wall: 'right',  height: 'middle', offsetX: 0,    offsetY: -200, offsetZ: 350, image: 'images/Decible app2.jpg',             page: 'html/project-8.html' },
       { id: 9,  title: 'Right Piece',  wall: 'right',  height: 'low',    offsetX: 0,    offsetY: 300,  offsetZ: -200, image: 'images/decible art.jpg', page: 'html/project-9.html' },
@@ -342,8 +356,10 @@
       { id: 12, title: 'Ceiling Art',  wall: 'ceiling',height: 'ceiling',offsetX: 0,    offsetY: 0,    offsetZ: 0, image: 'images/bigfeelings.webp', page: 'html/project-12.html' }
     ];
 
+    const scene = document.querySelector('.scene');
     const camera = document.querySelector(".camera");
     const cameraContent = document.querySelector(".camera-content");
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     let selectedCard = null;
     let isZoomedIn = false;
     const cards = [];
@@ -662,12 +678,13 @@
 
     // Keyboard fallback: press L to request lock
     document.addEventListener('keydown', (e) => {
+      if (isTouch) return;
       if (!isZoomedIn && e.key.toLowerCase() === 'l' && document.pointerLockElement !== document.body) requestLock();
     });
 
     // Accumulate yaw/pitch with mouse movement for infinite yaw and clamped pitch
     document.addEventListener('mousemove', (e) => {
-      if (isZoomedIn) return;
+      if (isTouch || isZoomedIn) return;
       if (document.pointerLockElement === document.body) {
         // Pointer-lock mode: use deltas for infinite yaw
         yaw += e.movementX * sensitivity;
@@ -693,6 +710,48 @@
       });
     });
 
+    let touchActive = false;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+
+    const updateFromTouch = (event) => {
+      if (!touchActive || isZoomedIn) return;
+      const touch = event.touches[0];
+      const deltaX = touch.clientX - lastTouchX;
+      const deltaY = touch.clientY - lastTouchY;
+      lastTouchX = touch.clientX;
+      lastTouchY = touch.clientY;
+      yaw += deltaX * 0.25;
+      pitch -= deltaY * 0.25;
+      const maxPitch = 89;
+      if (pitch > maxPitch) pitch = maxPitch;
+      if (pitch < -maxPitch) pitch = -maxPitch;
+      gsap.to(camera, {
+        rotationY: yaw,
+        rotationX: pitch,
+        duration: 0.12,
+        ease: 'power2.out'
+      });
+    };
+
+    scene.addEventListener('touchstart', (event) => {
+      if (!isTouch || isZoomedIn) return;
+      const touch = event.touches[0];
+      lastTouchX = touch.clientX;
+      lastTouchY = touch.clientY;
+      touchActive = true;
+    }, { passive: true });
+
+    scene.addEventListener('touchmove', (event) => {
+      if (!isTouch || isZoomedIn) return;
+      event.preventDefault();
+      updateFromTouch(event);
+    }, { passive: false });
+
+    scene.addEventListener('touchend', () => {
+      touchActive = false;
+    });
+
 
     // Contact button - show social modal
     document.getElementById('contact-btn').addEventListener('click', () => {
@@ -714,7 +773,7 @@
 
     // Projects button
     document.getElementById('second-room-btn').addEventListener('click', () => {
-      window.location.href = 'html/project-1.html';
+      window.location.href = 'html/decible.html';
     });
 
     // --- Room Walls ---
